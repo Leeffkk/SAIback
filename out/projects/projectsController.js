@@ -232,6 +232,25 @@ var ProjectsController = /** @class */ (function () {
             });
         }
     };
+    //uploadMotion
+    //uploads image for the motion model to process
+    ProjectsController.prototype.uploadMotion = function (req, res) {
+        try {
+            var file = req.file;
+            console.log(file);
+            var fs = require('fs');
+            var old_file_name = file.filename;
+            var new_file_name = Date.now() + file.originalname;
+            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+            console.log(fs.existsSync(file.destination + new_file_name));
+            console.log('then!!!!!!!!!!!!!!');
+            res.send({ fn: 'uploadMotion', status: 'success', data: new_file_name });
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadMotion', status: 'failure', data: err });
+        }
+    };
     ProjectsController.db = new MongoDB_1.Database(config_1.Config.url, "projects");
     ProjectsController.projectsTable = 'projects';
     return ProjectsController;

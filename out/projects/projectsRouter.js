@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectsRouter = void 0;
 var AppRouter_1 = require("../common/AppRouter");
+var MyMulter_1 = require("../common/MyMulter");
 var securityMiddleware_1 = require("../security/securityMiddleware");
 var projectsController_1 = require("./projectsController");
 //This is just an example second router to show how additional routers can be added
@@ -36,6 +37,7 @@ var ProjectsRouter = /** @class */ (function (_super) {
         this.expressRouter.post('/approveProject', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.approveProject);
         this.expressRouter.post('/rejectProject', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.rejectProject);
         this.expressRouter.post('/checkProjectCommits', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.checkProjectCommits);
+        this.expressRouter.post('/uploadMotion', MyMulter_1.MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion);
     };
     ProjectsRouter.projController = new projectsController_1.ProjectsController();
     return ProjectsRouter;

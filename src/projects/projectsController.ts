@@ -2,12 +2,13 @@ import express, { RequestHandler } from 'express';
 import { ProjectsModel } from './projectsModel';
 import { Database } from '../common/MongoDB';
 import { Config } from '../config';
+import { MotionUpload } from '../common/MyMulter';
 //This is just an example of a second controller attached to the security module
 
 export class ProjectsController {
     static db: Database = new Database(Config.url, "projects");
     static projectsTable = 'projects';
-
+    
     //getApprovedProjects
     //sends a json object with all projects in the system
     getApprovedProjects(req: express.Request, res: express.Response) {
@@ -232,6 +233,35 @@ export class ProjectsController {
             });
 
         }
+    }
+
+    //uploadMotion
+    //uploads image for the motion model to process
+    uploadMotion(req: express.Request, res: express.Response) {
+        try{
+            const file = (req as any).file;
+
+            console.log(file);
+    
+            var fs = require('fs');
+    
+            var old_file_name = file.filename;
+
+            var new_file_name = Date.now() + file.originalname;
+    
+            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+
+            console.log(fs.existsSync(file.destination + new_file_name));
+        
+            console.log('then!!!!!!!!!!!!!!');
+
+            res.send({ fn: 'uploadMotion', status: 'success', data: new_file_name});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadMotion', status: 'failure', data: err });
+        }
+        
     }
 
     //getSemesters

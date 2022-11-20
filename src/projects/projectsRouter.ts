@@ -1,4 +1,5 @@
 import { AppRouter } from "../common/AppRouter";
+import { MotionUpload } from "../common/MyMulter";
 import { SecurityMiddleware } from "../security/securityMiddleware";
 import { ProjectsController } from "./projectsController";
 
@@ -20,5 +21,6 @@ export class ProjectsRouter extends AppRouter{
         this.expressRouter.post('/approveProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.approveProject);
         this.expressRouter.post('/rejectProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.rejectProject);
         this.expressRouter.post('/checkProjectCommits',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.checkProjectCommits);
+        this.expressRouter.post('/uploadMotion', MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion)
     }
 }
