@@ -38,6 +38,7 @@ var ProjectsRouter = /** @class */ (function (_super) {
         this.expressRouter.post('/rejectProject', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.rejectProject);
         this.expressRouter.post('/checkProjectCommits', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.checkProjectCommits);
         this.expressRouter.post('/uploadMotion', MyMulter_1.MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion);
+        this.expressRouter.post('/downloadMotion', ProjectsRouter.projController.downloadMotion);
     };
     ProjectsRouter.projController = new projectsController_1.ProjectsController();
     return ProjectsRouter;

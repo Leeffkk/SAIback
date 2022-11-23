@@ -4,6 +4,8 @@ exports.ProjectsController = void 0;
 var projectsModel_1 = require("./projectsModel");
 var MongoDB_1 = require("../common/MongoDB");
 var config_1 = require("../config");
+// import { MotionUpload } from '../common/MyMulter';
+var RunModels_1 = require("../common/RunModels");
 //This is just an example of a second controller attached to the security module
 var ProjectsController = /** @class */ (function () {
     function ProjectsController() {
@@ -243,16 +245,56 @@ var ProjectsController = /** @class */ (function () {
             var new_file_name = Date.now() + file.originalname;
             fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
             console.log(fs.existsSync(file.destination + new_file_name));
+            var path = require('path');
+            var abs_destination = path.resolve(file.destination) + '\\';
+            var inputFile = abs_destination + new_file_name;
+            var outputFile = abs_destination + 'output_' + new_file_name;
+            var img_mod = 'RadarSAT';
+            inputFile = inputFile.replace('\\', '/');
+            outputFile = outputFile.replace('\\', '/');
+            console.log('inputFile: ', inputFile);
+            console.log("outputFile: ", outputFile);
+            console.log("img_mod: ", img_mod);
+            ProjectsController.runModels.runMotion(inputFile, outputFile, img_mod)
+                .then(function (result) { }).catch(function (reason) { return res.status(500).send(reason).end(); });
             console.log('then!!!!!!!!!!!!!!');
-            res.send({ fn: 'uploadMotion', status: 'success', data: new_file_name });
+            res.send({ fn: 'uploadMotion', status: 'success', data: 'output_' + new_file_name });
         }
         catch (err) {
             console.error(err);
             res.send({ fn: 'uploadMotion', status: 'failure', data: err });
         }
     };
+    //downloadMotion
+    //downloadMotion result processed by motion model
+    ProjectsController.prototype.downloadMotion = function (req, res) {
+        try {
+            if (req.body.name == null) {
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(config_1.Config.motionDir + name);
+            console.log("downloadMotion: ", filePath);
+            var fs = require('fs');
+            if (fs.existsSync(filePath)) {
+                console.log('downloadMotion flag1');
+                res.sendFile(filePath);
+            }
+            else {
+                console.log('downloadMotion flag2');
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'output not avaiable' });
+            }
+            // res.send({ fn: 'downloadMotion', status: 'success', data:''});
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'downloadMotion', status: 'failure', data: err });
+        }
+    };
     ProjectsController.db = new MongoDB_1.Database(config_1.Config.url, "projects");
     ProjectsController.projectsTable = 'projects';
+    ProjectsController.runModels = new RunModels_1.RunModels();
     return ProjectsController;
 }());
 exports.ProjectsController = ProjectsController;
