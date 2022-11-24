@@ -266,7 +266,7 @@ var ProjectsController = /** @class */ (function () {
         }
     };
     //downloadMotion
-    //downloadMotion result processed by motion model
+    //download Motion result processed by motion model
     ProjectsController.prototype.downloadMotion = function (req, res) {
         try {
             if (req.body.name == null) {
@@ -278,18 +278,38 @@ var ProjectsController = /** @class */ (function () {
             console.log("downloadMotion: ", filePath);
             var fs = require('fs');
             if (fs.existsSync(filePath)) {
-                console.log('downloadMotion flag1');
                 res.sendFile(filePath);
             }
             else {
-                console.log('downloadMotion flag2');
-                res.send({ fn: 'downloadMotion', status: 'failure', data: 'output not avaiable' });
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'file not avaiable' });
             }
             // res.send({ fn: 'downloadMotion', status: 'success', data:''});
         }
         catch (err) {
             console.error(err);
             res.send({ fn: 'downloadMotion', status: 'failure', data: err });
+        }
+    };
+    //isReadyMotion
+    //checks if the result processed by motion model is ready to be downloaded
+    ProjectsController.prototype.isReadyMotion = function (req, res) {
+        try {
+            if (req.body.name == null) {
+                res.send({ fn: 'isReadyMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(config_1.Config.motionDir + name);
+            console.log("isReadyMotion: ", filePath);
+            var fs = require('fs');
+            var isReady = fs.existsSync(filePath);
+            console.log("Is file ready? :", isReady);
+            res.send({ fn: 'isReadyMotion', status: 'success', data: isReady });
+            // res.send({ fn: 'isReadyMotion', status: 'success', data:''});
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'isReadyMotion', status: 'failure', data: err });
         }
     };
     ProjectsController.db = new MongoDB_1.Database(config_1.Config.url, "projects");

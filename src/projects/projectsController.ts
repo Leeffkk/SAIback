@@ -283,7 +283,7 @@ export class ProjectsController {
     }
 
         //downloadMotion
-    //downloadMotion result processed by motion model
+    //download Motion result processed by motion model
     downloadMotion(req: express.Request, res: express.Response) {
         try{
             if (req.body.name == null){
@@ -297,12 +297,10 @@ export class ProjectsController {
 
             var fs = require('fs');
             if (fs.existsSync(filePath)){
-                console.log('downloadMotion flag1');
                 res.sendFile(filePath);
             }
             else{
-                console.log('downloadMotion flag2');
-                res.send({ fn: 'downloadMotion', status: 'failure', data: 'output not avaiable' });
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'file not avaiable' });
             }
 
             // res.send({ fn: 'downloadMotion', status: 'success', data:''});
@@ -313,6 +311,40 @@ export class ProjectsController {
         }
         
     }
+
+
+            //isReadyMotion
+    //checks if the result processed by motion model is ready to be downloaded
+    isReadyMotion(req: express.Request, res: express.Response) {
+        try{
+            if (req.body.name == null){
+                res.send({ fn: 'isReadyMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(Config.motionDir + name);
+
+            console.log("isReadyMotion: ", filePath)
+
+            var fs = require('fs');
+
+            
+            var isReady = fs.existsSync(filePath);
+
+            console.log("Is file ready? :", isReady);
+
+            res.send({ fn: 'isReadyMotion', status: 'success', data: isReady });
+
+
+            // res.send({ fn: 'isReadyMotion', status: 'success', data:''});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'isReadyMotion', status: 'failure', data: err });
+        }
+        
+    }
+
 
     //getSemesters
     //returns all valid unique semesters in the database

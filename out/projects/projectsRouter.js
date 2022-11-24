@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectsRouter = void 0;
 var AppRouter_1 = require("../common/AppRouter");
 var MyMulter_1 = require("../common/MyMulter");
-var securityMiddleware_1 = require("../security/securityMiddleware");
 var projectsController_1 = require("./projectsController");
 //This is just an example second router to show how additional routers can be added
 var ProjectsRouter = /** @class */ (function (_super) {
@@ -26,19 +25,19 @@ var ProjectsRouter = /** @class */ (function (_super) {
     }
     //sets up the routes within this module shows an example of a route that requires authorization, and one that does not
     ProjectsRouter.prototype.setupRoutes = function () {
-        this.expressRouter.get('/getApprovedProjects', ProjectsRouter.projController.getApprovedProjects);
-        this.expressRouter.get('/getSubmittedProjects', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.getSubmittedProjects);
-        this.expressRouter.get('/getProjectsByCurUser', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.getProjectsByCurUser);
-        // this.expressRouter.get('/getProjectsById',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.getProjectsById);
-        this.expressRouter.post('/', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.addProject);
-        this.expressRouter.put('/', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.updateProject);
-        this.expressRouter.post('/deleteProject', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.deleteProject);
-        this.expressRouter.get('/getAllProjects', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.getAllProjects);
-        this.expressRouter.post('/approveProject', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.approveProject);
-        this.expressRouter.post('/rejectProject', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.rejectProject);
-        this.expressRouter.post('/checkProjectCommits', [securityMiddleware_1.SecurityMiddleware.RequireAuth], ProjectsRouter.projController.checkProjectCommits);
+        // this.expressRouter.get('/getApprovedProjects',ProjectsRouter.projController.getApprovedProjects);
+        // this.expressRouter.get('/getSubmittedProjects',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.getSubmittedProjects);
+        // this.expressRouter.get('/getProjectsByCurUser',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.getProjectsByCurUser);
+        // this.expressRouter.post('/',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.addProject);
+        // this.expressRouter.put('/',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.updateProject);
+        // this.expressRouter.post('/deleteProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.deleteProject);
+        // this.expressRouter.get('/getAllProjects',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.getAllProjects);
+        // this.expressRouter.post('/approveProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.approveProject);
+        // this.expressRouter.post('/rejectProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.rejectProject);
+        // this.expressRouter.post('/checkProjectCommits',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.checkProjectCommits);
         this.expressRouter.post('/uploadMotion', MyMulter_1.MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion);
         this.expressRouter.post('/downloadMotion', ProjectsRouter.projController.downloadMotion);
+        this.expressRouter.post('/isReadyMotion', ProjectsRouter.projController.isReadyMotion);
     };
     ProjectsRouter.projController = new projectsController_1.ProjectsController();
     return ProjectsRouter;
