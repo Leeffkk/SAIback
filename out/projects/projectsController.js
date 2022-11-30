@@ -238,6 +238,11 @@ var ProjectsController = /** @class */ (function () {
     //uploads image for the motion model to process
     ProjectsController.prototype.uploadMotion = function (req, res) {
         try {
+            var allowed_model_params = ['U-Net', 'WorldView', 'RadarSAT', 'GPRI'];
+            var img_mod = req.body.model_param;
+            if (!(allowed_model_params.includes(img_mod))) {
+                throw new Error('invalid model_param: ' + img_mod);
+            }
             var file = req.file;
             console.log(file);
             var fs = require('fs');
@@ -249,7 +254,6 @@ var ProjectsController = /** @class */ (function () {
             var abs_destination = path.resolve(file.destination) + '\\';
             var inputFile = abs_destination + new_file_name;
             var outputFile = abs_destination + 'output_' + new_file_name;
-            var img_mod = 'RadarSAT';
             inputFile = inputFile.replace('\\', '/');
             outputFile = outputFile.replace('\\', '/');
             console.log('inputFile: ', inputFile);

@@ -242,6 +242,14 @@ export class ProjectsController {
     //uploads image for the motion model to process
     uploadMotion(req: express.Request, res: express.Response) {
         try{
+            var allowed_model_params = ['U-Net','WorldView','RadarSAT','GPRI'];
+
+            var img_mod = req.body.model_param;
+
+            if (! (allowed_model_params.includes(img_mod))){
+                throw new Error('invalid model_param: ' + img_mod);
+            }
+
             const file = (req as any).file;
 
             console.log(file);
@@ -257,17 +265,17 @@ export class ProjectsController {
             console.log(fs.existsSync(file.destination + new_file_name));
 
             var path = require('path');
-            var abs_destination = path.resolve(file.destination)+'\\'
+            var abs_destination = path.resolve(file.destination)+'\\';
 
-            var inputFile = abs_destination + new_file_name
-            var outputFile = abs_destination + 'output_'+new_file_name
-            var img_mod = 'RadarSAT'
+            var inputFile = abs_destination + new_file_name;
+            var outputFile = abs_destination + 'output_'+new_file_name;
+            
             inputFile = inputFile.replace('\\', '/');
             outputFile = outputFile.replace('\\', '/');
 
-            console.log('inputFile: ', inputFile)
-            console.log("outputFile: ", outputFile)
-            console.log("img_mod: ", img_mod)
+            console.log('inputFile: ', inputFile);
+            console.log("outputFile: ", outputFile);
+            console.log("img_mod: ", img_mod);
 
             ProjectsController.runModels.runMotion(inputFile, outputFile, img_mod)
                 .then(result => {}).catch((reason) => res.status(500).send(reason).end());
@@ -293,7 +301,7 @@ export class ProjectsController {
             var path = require('path');
             var filePath = path.resolve(Config.motionDir + name);
 
-            console.log("downloadMotion: ", filePath)
+            console.log("downloadMotion: ", filePath);
 
             var fs = require('fs');
             if (fs.existsSync(filePath)){
@@ -324,7 +332,7 @@ export class ProjectsController {
             var path = require('path');
             var filePath = path.resolve(Config.motionDir + name);
 
-            console.log("isReadyMotion: ", filePath)
+            console.log("isReadyMotion: ", filePath);
 
             var fs = require('fs');
 
