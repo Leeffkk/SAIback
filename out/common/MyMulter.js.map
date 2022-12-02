@@ -1,1 +1,1 @@
-{"version":3,"file":"MyMulter.js","sourceRoot":"","sources":["../../src/common/MyMulter.ts"],"names":[],"mappings":";;;AAAA,oCAAmC;AACnC,qBAAqB;AACrB,IAAM,MAAM,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAA;AACnB,QAAA,YAAY,GAAG,MAAM,CAAC,EAAE,IAAI,EAAE,eAAM,CAAC,SAAS,EAAC,CAAC,CAAC"}
+{"version":3,"file":"MyMulter.js","sourceRoot":"","sources":["../../src/common/MyMulter.ts"],"names":[],"mappings":";;;AAAA,oCAAmC;AACnC,2BAA2B;AAC3B,IAAM,MAAM,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAA;AACnB,QAAA,UAAU,GAAG,MAAM,CAAC,EAAE,IAAI,EAAE,eAAM,CAAC,OAAO,EAAC,CAAC,CAAC"}

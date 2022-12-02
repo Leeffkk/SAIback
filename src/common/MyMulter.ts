@@ -1,4 +1,4 @@
 import { Config } from '../config';
-//Multer information 
+//Multer information Motion
 const multer = require('multer')
-export const MotionUpload = multer({ dest: Config.motionDir});
+export const LeadUpload = multer({ dest: Config.leadDir});

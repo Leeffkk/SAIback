@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MotionUpload = void 0;
+exports.LeadUpload = void 0;
 var config_1 = require("../config");
-//Multer information 
+//Multer information Motion
 var multer = require('multer');
-exports.MotionUpload = multer({ dest: config_1.Config.motionDir });
+exports.LeadUpload = multer({ dest: config_1.Config.leadDir });
 //# sourceMappingURL=MyMulter.js.map

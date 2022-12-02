@@ -9,6 +9,6 @@ exports.Config = {
     // url: process.env.MONGOURL || "mongodb://localhost:27017/"
     // url: "mongodb://localhost:27017/"
     url: "mongodb+srv://yufan:yufan@cluster0.5i65efn.mongodb.net/test",
-    motionDir: 'motionData/'
+    leadDir: 'leadData/'
 };
 //# sourceMappingURL=config.js.map

@@ -4,7 +4,7 @@ exports.ProjectsController = void 0;
 var projectsModel_1 = require("./projectsModel");
 var MongoDB_1 = require("../common/MongoDB");
 var config_1 = require("../config");
-// import { MotionUpload } from '../common/MyMulter';
+// import { LeadUpload } from '../common/MyMulter';
 var RunModels_1 = require("../common/RunModels");
 //This is just an example of a second controller attached to the security module
 var ProjectsController = /** @class */ (function () {
@@ -234,9 +234,9 @@ var ProjectsController = /** @class */ (function () {
             });
         }
     };
-    //uploadMotion
-    //uploads image for the motion model to process
-    ProjectsController.prototype.uploadMotion = function (req, res) {
+    //uploadLead
+    //uploads image for the lead model to process
+    ProjectsController.prototype.uploadLead = function (req, res) {
         try {
             var allowed_model_params = ['U-Net', 'WorldView', 'RadarSAT', 'GPRI'];
             var img_mod = req.body.model_param;
@@ -259,61 +259,61 @@ var ProjectsController = /** @class */ (function () {
             console.log('inputFile: ', inputFile);
             console.log("outputFile: ", outputFile);
             console.log("img_mod: ", img_mod);
-            ProjectsController.runModels.runMotion(inputFile, outputFile, img_mod)
+            ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
                 .then(function (result) { }).catch(function (reason) { return res.status(500).send(reason).end(); });
             console.log('then!!!!!!!!!!!!!!');
-            res.send({ fn: 'uploadMotion', status: 'success', data: 'output_' + new_file_name });
+            res.send({ fn: 'uploadLead', status: 'success', data: 'output_' + new_file_name });
         }
         catch (err) {
             console.error(err);
-            res.send({ fn: 'uploadMotion', status: 'failure', data: err });
+            res.send({ fn: 'uploadLead', status: 'failure', data: err });
         }
     };
-    //downloadMotion
-    //download Motion result processed by motion model
-    ProjectsController.prototype.downloadMotion = function (req, res) {
+    //downloadLead
+    //download Lead result processed by lead model
+    ProjectsController.prototype.downloadLead = function (req, res) {
         try {
             if (req.body.name == null) {
-                res.send({ fn: 'downloadMotion', status: 'failure', data: 'name can not be null' });
+                res.send({ fn: 'downloadLead', status: 'failure', data: 'name can not be null' });
             }
             var name = req.body.name;
             var path = require('path');
-            var filePath = path.resolve(config_1.Config.motionDir + name);
-            console.log("downloadMotion: ", filePath);
+            var filePath = path.resolve(config_1.Config.leadDir + name);
+            console.log("downloadLead: ", filePath);
             var fs = require('fs');
             if (fs.existsSync(filePath)) {
                 res.sendFile(filePath);
             }
             else {
-                res.send({ fn: 'downloadMotion', status: 'failure', data: 'file not avaiable' });
+                res.send({ fn: 'downloadLead', status: 'failure', data: 'file not avaiable' });
             }
-            // res.send({ fn: 'downloadMotion', status: 'success', data:''});
+            // res.send({ fn: 'downloadLead', status: 'success', data:''});
         }
         catch (err) {
             console.error(err);
-            res.send({ fn: 'downloadMotion', status: 'failure', data: err });
+            res.send({ fn: 'downloadLead', status: 'failure', data: err });
         }
     };
-    //isReadyMotion
-    //checks if the result processed by motion model is ready to be downloaded
-    ProjectsController.prototype.isReadyMotion = function (req, res) {
+    //isReadyLead
+    //checks if the result processed by lead model is ready to be downloaded
+    ProjectsController.prototype.isReadyLead = function (req, res) {
         try {
             if (req.body.name == null) {
-                res.send({ fn: 'isReadyMotion', status: 'failure', data: 'name can not be null' });
+                res.send({ fn: 'isReadyLead', status: 'failure', data: 'name can not be null' });
             }
             var name = req.body.name;
             var path = require('path');
-            var filePath = path.resolve(config_1.Config.motionDir + name);
-            console.log("isReadyMotion: ", filePath);
+            var filePath = path.resolve(config_1.Config.leadDir + name);
+            console.log("isReadyLead: ", filePath);
             var fs = require('fs');
             var isReady = fs.existsSync(filePath);
             console.log("Is file ready? :", isReady);
-            res.send({ fn: 'isReadyMotion', status: 'success', data: isReady });
-            // res.send({ fn: 'isReadyMotion', status: 'success', data:''});
+            res.send({ fn: 'isReadyLead', status: 'success', data: isReady });
+            // res.send({ fn: 'isReadyLead', status: 'success', data:''});
         }
         catch (err) {
             console.error(err);
-            res.send({ fn: 'isReadyMotion', status: 'failure', data: err });
+            res.send({ fn: 'isReadyLead', status: 'failure', data: err });
         }
     };
     ProjectsController.db = new MongoDB_1.Database(config_1.Config.url, "projects");

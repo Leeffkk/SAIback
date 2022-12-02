@@ -35,9 +35,9 @@ var ProjectsRouter = /** @class */ (function (_super) {
         // this.expressRouter.post('/approveProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.approveProject);
         // this.expressRouter.post('/rejectProject',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.rejectProject);
         // this.expressRouter.post('/checkProjectCommits',[SecurityMiddleware.RequireAuth],ProjectsRouter.projController.checkProjectCommits);
-        this.expressRouter.post('/uploadMotion', MyMulter_1.MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion);
-        this.expressRouter.post('/downloadMotion', ProjectsRouter.projController.downloadMotion);
-        this.expressRouter.post('/isReadyMotion', ProjectsRouter.projController.isReadyMotion);
+        this.expressRouter.post('/uploadLead', MyMulter_1.LeadUpload.single('file'), ProjectsRouter.projController.uploadLead);
+        this.expressRouter.post('/downloadLead', ProjectsRouter.projController.downloadLead);
+        this.expressRouter.post('/isReadyLead', ProjectsRouter.projController.isReadyLead);
     };
     ProjectsRouter.projController = new projectsController_1.ProjectsController();
     return ProjectsRouter;
