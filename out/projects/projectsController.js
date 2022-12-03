@@ -238,7 +238,7 @@ var ProjectsController = /** @class */ (function () {
     //uploads image for the lead model to process
     ProjectsController.prototype.uploadLead = function (req, res) {
         try {
-            var allowed_model_params = ['U-Net', 'WorldView', 'RadarSAT', 'GPRI'];
+            var allowed_model_params = ['WorldView', 'RadarSAT', 'GPRI'];
             var img_mod = req.body.model_param;
             if (!(allowed_model_params.includes(img_mod))) {
                 throw new Error('invalid model_param: ' + img_mod);

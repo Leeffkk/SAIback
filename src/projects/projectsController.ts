@@ -242,7 +242,7 @@ export class ProjectsController {
     //uploads image for the lead model to process
     uploadLead(req: express.Request, res: express.Response) {
         try{
-            var allowed_model_params = ['U-Net','WorldView','RadarSAT','GPRI'];
+            var allowed_model_params = ['WorldView','RadarSAT','GPRI'];
 
             var img_mod = req.body.model_param;
 
