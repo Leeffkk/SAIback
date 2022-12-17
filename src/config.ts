@@ -13,7 +13,7 @@ export const Config={
 };
 
 export const ProdConfig={
-    serverport: process.env.PORT || 3000,
+    serverport: process.env.PORT || 4396,
     secret: process.env.SECRET || "some-secret-goes-here",
     tokenLife: 1800,
     // url: process.env.MONGOURL || "mongodb://localhost:27017/"
