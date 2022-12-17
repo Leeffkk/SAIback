@@ -1,16 +1,22 @@
 import express, { RequestHandler } from 'express';
 import { ProjectsModel } from './projectsModel';
 import { Database } from '../common/MongoDB';
-import { Config } from '../config';
+import { Config, ProdConfig } from '../config';
 // import { LeadUpload } from '../common/MyMulter';
 import { RunModels } from '../common/RunModels'
 
 //This is just an example of a second controller attached to the security module
 
+var config_to_use = Config;
+if (process.env.NODE_ENV && process.env.NODE_ENV=="prod"){
+    config_to_use = ProdConfig;
+}
+
 export class ProjectsController {
-    static db: Database = new Database(Config.url, "projects");
+    static db: Database = new Database(config_to_use.url, "projects");
     static projectsTable = 'projects';
     static runModels: RunModels = new RunModels();
+    
     
     //getApprovedProjects
     //sends a json object with all projects in the system
@@ -242,7 +248,7 @@ export class ProjectsController {
     //uploads image for the lead model to process
     uploadLead(req: express.Request, res: express.Response) {
         try{
-            var allowed_model_params = ['WorldView','RadarSAT','GPRI'];
+            var allowed_model_params = config_to_use.allowed_lead_params;
 
             var img_mod = req.body.model_param;
 
@@ -268,7 +274,7 @@ export class ProjectsController {
             var abs_destination = path.resolve(file.destination)+'\\';
 
             var inputFile = abs_destination + new_file_name;
-            var outputFile = abs_destination + 'output_'+new_file_name;
+            var outputFile = abs_destination + 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
             
             inputFile = inputFile.replace('\\', '/');
             outputFile = outputFile.replace('\\', '/');
@@ -281,7 +287,7 @@ export class ProjectsController {
                 .then(result => {}).catch((reason) => res.status(500).send(reason).end());
             console.log('then!!!!!!!!!!!!!!');
 
-            res.send({ fn: 'uploadLead', status: 'success', data: 'output_'+new_file_name});
+            res.send({ fn: 'uploadLead', status: 'success', data: 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png'});
 
         } catch (err) {
             console.error(err);
@@ -299,7 +305,7 @@ export class ProjectsController {
             }
             var name = req.body.name;
             var path = require('path');
-            var filePath = path.resolve(Config.leadDir + name);
+            var filePath = path.resolve(config_to_use.leadDir + name);
 
             console.log("downloadLead: ", filePath);
 
@@ -330,7 +336,7 @@ export class ProjectsController {
             }
             var name = req.body.name;
             var path = require('path');
-            var filePath = path.resolve(Config.leadDir + name);
+            var filePath = path.resolve(config_to_use.leadDir + name);
 
             console.log("isReadyLead: ", filePath);
 

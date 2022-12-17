@@ -7,6 +7,10 @@ var config_1 = require("../config");
 // import { LeadUpload } from '../common/MyMulter';
 var RunModels_1 = require("../common/RunModels");
 //This is just an example of a second controller attached to the security module
+var config_to_use = config_1.Config;
+if (process.env.NODE_ENV && process.env.NODE_ENV == "prod") {
+    config_to_use = config_1.ProdConfig;
+}
 var ProjectsController = /** @class */ (function () {
     function ProjectsController() {
     }
@@ -238,7 +242,7 @@ var ProjectsController = /** @class */ (function () {
     //uploads image for the lead model to process
     ProjectsController.prototype.uploadLead = function (req, res) {
         try {
-            var allowed_model_params = ['WorldView', 'RadarSAT', 'GPRI'];
+            var allowed_model_params = config_to_use.allowed_lead_params;
             var img_mod = req.body.model_param;
             if (!(allowed_model_params.includes(img_mod))) {
                 throw new Error('invalid model_param: ' + img_mod);
@@ -253,7 +257,7 @@ var ProjectsController = /** @class */ (function () {
             var path = require('path');
             var abs_destination = path.resolve(file.destination) + '\\';
             var inputFile = abs_destination + new_file_name;
-            var outputFile = abs_destination + 'output_' + new_file_name;
+            var outputFile = abs_destination + 'output_' + new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
             inputFile = inputFile.replace('\\', '/');
             outputFile = outputFile.replace('\\', '/');
             console.log('inputFile: ', inputFile);
@@ -262,7 +266,7 @@ var ProjectsController = /** @class */ (function () {
             ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
                 .then(function (result) { }).catch(function (reason) { return res.status(500).send(reason).end(); });
             console.log('then!!!!!!!!!!!!!!');
-            res.send({ fn: 'uploadLead', status: 'success', data: 'output_' + new_file_name });
+            res.send({ fn: 'uploadLead', status: 'success', data: 'output_' + new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png' });
         }
         catch (err) {
             console.error(err);
@@ -278,7 +282,7 @@ var ProjectsController = /** @class */ (function () {
             }
             var name = req.body.name;
             var path = require('path');
-            var filePath = path.resolve(config_1.Config.leadDir + name);
+            var filePath = path.resolve(config_to_use.leadDir + name);
             console.log("downloadLead: ", filePath);
             var fs = require('fs');
             if (fs.existsSync(filePath)) {
@@ -303,7 +307,7 @@ var ProjectsController = /** @class */ (function () {
             }
             var name = req.body.name;
             var path = require('path');
-            var filePath = path.resolve(config_1.Config.leadDir + name);
+            var filePath = path.resolve(config_to_use.leadDir + name);
             console.log("isReadyLead: ", filePath);
             var fs = require('fs');
             var isReady = fs.existsSync(filePath);
@@ -316,7 +320,7 @@ var ProjectsController = /** @class */ (function () {
             res.send({ fn: 'isReadyLead', status: 'failure', data: err });
         }
     };
-    ProjectsController.db = new MongoDB_1.Database(config_1.Config.url, "projects");
+    ProjectsController.db = new MongoDB_1.Database(config_to_use.url, "projects");
     ProjectsController.projectsTable = 'projects';
     ProjectsController.runModels = new RunModels_1.RunModels();
     return ProjectsController;
