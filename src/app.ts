@@ -12,6 +12,7 @@ class Application extends NodeApplication {
     
     //Notify that server is running
     OnSetupComplete(port: number): void {
+        console.log('NODE_ENV: ' + process.env.NODE_ENV);
         console.log('ExampleApi Listening on port ' + port.toString());
     }
 
