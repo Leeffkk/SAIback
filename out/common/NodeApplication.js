@@ -6,6 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NodeApplication = void 0;
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
+var https = require('node:https');
+var fs = require('node:fs');
+var options = {
+    key: fs.readFileSync('E:/Research/SeaIceWebsite/SAI/src/client-key.pem'),
+    cert: fs.readFileSync('E:/Research/SeaIceWebsite/SAI/src/client-cert.pem'),
+};
 /* This is the base class for a Node Express application, it provides lifecycle hooks
     for various stages of application initialization and an abstract method
     for attaching the endpoint routes to the appliation */
@@ -49,7 +55,8 @@ var NodeApplication = /** @class */ (function () {
     //startServer: Called to start the node.js server
     NodeApplication.prototype.startServer = function () {
         var _this = this;
-        this.app.listen(this.port, function () { return _this.OnSetupComplete(_this.port); });
+        // this.app.listen(this.port, ()=>this.OnSetupComplete(this.port));
+        https.createServer(options, this.app).listen(this.port, function () { return _this.OnSetupComplete(_this.port); });
     };
     return NodeApplication;
 }());

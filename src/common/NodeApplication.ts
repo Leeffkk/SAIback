@@ -1,6 +1,19 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { AppRouter } from './AppRouter';
+import { Config, ProdConfig } from '../config';
+
+var config_to_use = Config;
+if (process.env.NODE_ENV && process.env.NODE_ENV=="prod"){
+    config_to_use = ProdConfig;
+}
+
+    const https = require('node:https');
+    const fs = require('node:fs');
+    const options = {
+        key: fs.readFileSync(config_to_use.ket_path),
+        cert: fs.readFileSync(config_to_use.cert_path),
+    };
 
 /* This is the base class for a Node Express application, it provides lifecycle hooks
     for various stages of application initialization and an abstract method 
@@ -8,6 +21,8 @@ import { AppRouter } from './AppRouter';
 export abstract class NodeApplication {
     app: express.Application;
     routes: express.Router;
+
+    
 
     //NodeApplication:
     //  port: number - The port for the node server to listen on
@@ -53,6 +68,7 @@ export abstract class NodeApplication {
 
     //startServer: Called to start the node.js server
     startServer(): void {
-        this.app.listen(this.port, ()=>this.OnSetupComplete(this.port));
+        // this.app.listen(this.port, ()=>this.OnSetupComplete(this.port));
+        https.createServer(options, this.app).listen(this.port, ()=>this.OnSetupComplete(this.port));
     }
 }

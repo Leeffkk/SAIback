@@ -23,6 +23,7 @@ var Application = /** @class */ (function (_super) {
     }
     //Notify that server is running
     Application.prototype.OnSetupComplete = function (port) {
+        console.log('NODE_ENV: ' + process.env.NODE_ENV);
         console.log('ExampleApi Listening on port ' + port.toString());
     };
     //setup main routing for the application
