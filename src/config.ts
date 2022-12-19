@@ -9,7 +9,9 @@ export const Config={
     leadDir: 'leadData/',
     leadCode: 'E:/Research/SeaIceWebsite/SAI/src/leadCodes/getPrediction.py',
     leadCodeDir: 'E:/Research/SeaIceWebsite/SAI/src/leadCodes',
-    allowed_lead_params: ['WorldView','RadarSAT','GPRI']
+    allowed_lead_params: ['WorldView','RadarSAT','GPRI'],
+    ket_path: 'E:/Research/SeaIceWebsite/SAI/src/client-key.pem',
+    cert_path: 'E:/Research/SeaIceWebsite/SAI/src/client-cert.pem'
 };
 
 export const ProdConfig={
@@ -22,5 +24,7 @@ export const ProdConfig={
     leadDir: '/raid1/inprogress/leeff/SAIback/leadData/',
     leadCode: '/raid1/inprogress/leeff/SAIback/src/leadCodes/getPrediction.py',
     leadCodeDir: '/raid1/inprogress/leeff/SAIback/src/leadCodes/',
-    allowed_lead_params: ['WorldView','RadarSAT','GPRI']
+    allowed_lead_params: ['WorldView','RadarSAT','GPRI'],
+    ket_path: '/etc/apache2/ssl/vims.cis.udel.edu.key',
+    cert_path: '/etc/apache2/ssl/vims.cis.udel.edu.cert'
 }
