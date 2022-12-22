@@ -68,7 +68,7 @@ export abstract class NodeApplication {
 
     //startServer: Called to start the node.js server
     startServer(): void {
-        // this.app.listen(this.port, ()=>this.OnSetupComplete(this.port));
-        https.createServer(options, this.app).listen(this.port, ()=>this.OnSetupComplete(this.port));
+        this.app.listen(this.port, ()=>this.OnSetupComplete(this.port));
+        // https.createServer(options, this.app).listen(this.port, ()=>this.OnSetupComplete(this.port));
     }
 }

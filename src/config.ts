@@ -7,11 +7,11 @@ export const Config={
     // url: "mongodb://localhost:27017/"
     url: "mongodb+srv://yufan:yufan@cluster0.5i65efn.mongodb.net/test",
     leadDir: 'leadData/',
-    leadCode: 'E:/Research/SeaIceWebsite/SAI/src/leadCodes/getPrediction.py',
-    leadCodeDir: 'E:/Research/SeaIceWebsite/SAI/src/leadCodes',
+    leadCode: 'E:/SeaIceWebsite/SAIback/src/leadCodes/getPrediction.py',
+    leadCodeDir: 'E:/SeaIceWebsite/SAIback/src/leadCodes',
     allowed_lead_params: ['WorldView','RadarSAT','GPRI'],
-    ket_path: 'E:/Research/SeaIceWebsite/SAI/src/client-key.pem',
-    cert_path: 'E:/Research/SeaIceWebsite/SAI/src/client-cert.pem'
+    ket_path: 'E:/SeaIceWebsite/SAIback/src/client-key.pem',
+    cert_path: 'E:/SeaIceWebsite/SAIback/src/client-cert.pem'
 };
 
 export const ProdConfig={
