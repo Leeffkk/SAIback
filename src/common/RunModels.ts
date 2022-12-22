@@ -17,7 +17,7 @@ export class RunModels {
             })
             console.log('lead run model started')
             pyprog.stdout.on('data', function(data:any){
-                console.log(data);
+                console.log(data.toString());
                 // resolve(data);
             })
             pyprog.on('close', (code:any) => {
