@@ -17,11 +17,16 @@ export class RunModels {
             })
             console.log('lead run model started')
             pyprog.stdout.on('data', function(data:any){
-                resolve(data);
+                console.log(data);
+                // resolve(data);
             })
-            pyprog.stdout.on('data', (data:any) => {
-                reject(data);
-            })
+            pyprog.on('close', (code:any) => {
+                console.log('child process close all stdio with code ${code}');
+                // resolve();
+            });
+            // pyprog.stdout.on('data', (data:any) => {
+            //     reject(data);
+            // })
             console.log('lead run model finished')
         })
     }
