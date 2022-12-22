@@ -8,12 +8,12 @@ if (process.env.NODE_ENV && process.env.NODE_ENV=="prod"){
     config_to_use = ProdConfig;
 }
 
-    const https = require('node:https');
-    const fs = require('node:fs');
-    const options = {
-        key: fs.readFileSync(config_to_use.ket_path),
-        cert: fs.readFileSync(config_to_use.cert_path),
-    };
+    // const https = require('node:https');
+    // const fs = require('node:fs');
+    // const options = {
+    //     key: fs.readFileSync(config_to_use.ket_path),
+    //     cert: fs.readFileSync(config_to_use.cert_path),
+    // };
 
 /* This is the base class for a Node Express application, it provides lifecycle hooks
     for various stages of application initialization and an abstract method 
