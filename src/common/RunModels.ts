@@ -22,8 +22,14 @@ export class RunModels {
             })
             pyprog.on('close', (code:any) => {
                 console.log('child process close all stdio with code ${code}');
-                // resolve();
             });
+            pyprog.on('exit', (code:any) => {
+                console.log('child process exit with code ${code}');
+            });
+            pyprog.on('error', (code:any) => {
+                console.log('child process error with code ${code}');
+            });
+            
             // pyprog.stdout.on('data', (data:any) => {
             //     reject(data);
             // })
