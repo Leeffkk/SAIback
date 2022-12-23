@@ -283,6 +283,10 @@ export class ProjectsController {
             console.log("outputFile: ", outputFile);
             console.log("img_mod: ", img_mod);
 
+            while(!fs.existsSync(inputFile)){
+                setTimeout(function(){}, 1000);
+            }
+
             ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
                 .then(result => {}).catch((reason) => res.status(500).send(reason).end());
             console.log('then!!!!!!!!!!!!!!');
