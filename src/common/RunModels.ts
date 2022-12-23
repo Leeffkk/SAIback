@@ -11,7 +11,7 @@ export class RunModels {
 
     runLead(inputFile:string, outputFile:string, img_mod:string): Promise<boolean>{
         return new Promise(function(resolve, reject){
-            const spawn = require("child_process").spawnSync;
+            const spawn = require("child_process").spawn;
             const pyprog = spawn('python', [config_to_use.leadCode, inputFile, outputFile, img_mod], {
                 cwd: config_to_use.leadCodeDir
             })
