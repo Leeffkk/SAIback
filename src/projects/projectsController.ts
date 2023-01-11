@@ -3,7 +3,8 @@ import { ProjectsModel } from './projectsModel';
 import { Database } from '../common/MongoDB';
 import { Config, ProdConfig } from '../config';
 // import { LeadUpload } from '../common/MyMulter';
-import { RunModels } from '../common/RunModels'
+import { RunModels } from '../common/RunModels';
+import { ImagesModel } from './imagesModel';
 
 //This is just an example of a second controller attached to the security module
 
@@ -13,7 +14,8 @@ if (process.env.NODE_ENV && process.env.NODE_ENV=="prod"){
 }
 
 export class ProjectsController {
-    static db: Database = new Database(config_to_use.url, "projects");
+    static db: Database = new Database(config_to_use.url, "images");
+    static imagesTable = 'images';
     static projectsTable = 'projects';
     static runModels: RunModels = new RunModels();
     
@@ -242,6 +244,20 @@ export class ProjectsController {
             });
 
         }
+    }
+
+    addImage(req: express.Request, res: express.Response) {
+        const image: ImagesModel = ImagesModel.fromObject(req.body);
+
+        // image.submittedBy=req.body.authUser.email;
+        // image.submittedBy='';
+        // image.updatedBy=req.body.authUser.email;
+        // image.updatedBy='';
+        image.dateSubmitted=Date.now().toString();
+        image.dateUpdated=image.dateSubmitted;
+        ProjectsController.db.addRecord(ProjectsController.projectsTable, image.toObject())
+            .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
+            .catch((reason) => res.status(500).send(reason).end());
     }
 
     //uploadLead
