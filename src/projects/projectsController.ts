@@ -340,8 +340,8 @@ export class ProjectsController {
         ProjectsController.db.getOneRecord(ProjectsController.imagesTable, {'output_name':req.body.output_name})
             .then((result) => {
 
-                const proj: ProjectsModel = ProjectsModel.fromObject(req.body);
-                const tmpObj = proj.toObject();
+                const image: ImagesModel = ImagesModel.fromObject(req.body);
+                const tmpObj = image.toObject();
                 delete tmpObj.id;
                 delete tmpObj.name;
                 delete tmpObj.output_name;
