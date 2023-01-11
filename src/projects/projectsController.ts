@@ -255,7 +255,7 @@ export class ProjectsController {
         // image.updatedBy='';
         image.dateSubmitted=Date.now().toString();
         image.dateUpdated=image.dateSubmitted;
-        ProjectsController.db.addRecord(ProjectsController.projectsTable, image.toObject())
+        ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
             .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
             .catch((reason) => res.status(500).send(reason).end());
     }
@@ -308,7 +308,7 @@ export class ProjectsController {
             image.name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
             image.dateSubmitted=Date.now().toString();
             image.dateUpdated=image.dateSubmitted;
-            ProjectsController.db.addRecord(ProjectsController.projectsTable, image.toObject())
+            ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
                 .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
                 .catch((reason) => res.status(500).send(reason).end());
             // upload to database
