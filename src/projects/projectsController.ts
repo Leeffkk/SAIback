@@ -302,6 +302,16 @@ export class ProjectsController {
             while(!fs.existsSync(inputFile)){
                 setTimeout(function(){}, 1000);
             }
+            
+            // upload to database
+            const image: ImagesModel = new ImagesModel();
+            image.name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
+            image.dateSubmitted=Date.now().toString();
+            image.dateUpdated=image.dateSubmitted;
+            ProjectsController.db.addRecord(ProjectsController.projectsTable, image.toObject())
+                .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
+                .catch((reason) => res.status(500).send(reason).end());
+            // upload to database
 
             ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
                 .then(result => {}).catch((reason) => res.status(500).send(reason).end());
