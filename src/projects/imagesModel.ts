@@ -2,8 +2,9 @@
 export class ImagesModel{
     id='';
     name='';
-
-    toRemove=true;
+    output_name='';
+    comments='';
+    toRemove='true';
     submittedBy='';
     updatedBy='';
     dateSubmitted='';
@@ -12,6 +13,8 @@ export class ImagesModel{
     static fromObject(object:any):ImagesModel{
         const p:ImagesModel=new ImagesModel();
         p.name=object.name;
+        p.output_name=object.output_name;
+        p.comments=object.comments;
         // p.description=object.description;
         // p.url=object.url;
 
@@ -36,11 +39,13 @@ export class ImagesModel{
     }
     toObject():any{
         return {name:this.name,
+            output_name:this.output_name,
             // description:this.description,
             // url:this.url,
             // groupMembers:this.groupMembers,
             // posts:this.posts,
             toRemove:this.toRemove,
+            comments:this.comments,
             // applicant:this.applicant,
             // approvedBy:this.approvedBy,
             submittedBy:this.submittedBy,

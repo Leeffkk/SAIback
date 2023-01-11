@@ -246,19 +246,19 @@ export class ProjectsController {
         }
     }
 
-    addImage(req: express.Request, res: express.Response) {
-        const image: ImagesModel = ImagesModel.fromObject(req.body);
+    // addImage(req: express.Request, res: express.Response) {
+    //     const image: ImagesModel = ImagesModel.fromObject(req.body);
 
-        // image.submittedBy=req.body.authUser.email;
-        // image.submittedBy='';
-        // image.updatedBy=req.body.authUser.email;
-        // image.updatedBy='';
-        image.dateSubmitted=Date.now().toString();
-        image.dateUpdated=image.dateSubmitted;
-        ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
-            .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
-            .catch((reason) => res.status(500).send(reason).end());
-    }
+    //     // image.submittedBy=req.body.authUser.email;
+    //     // image.submittedBy='';
+    //     // image.updatedBy=req.body.authUser.email;
+    //     // image.updatedBy='';
+    //     image.dateSubmitted=Date.now().toString();
+    //     image.dateUpdated=image.dateSubmitted;
+    //     ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
+    //         .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
+    //         .catch((reason) => res.status(500).send(reason).end());
+    // }
 
     //uploadLead
     //uploads image for the lead model to process
@@ -303,16 +303,22 @@ export class ProjectsController {
                 setTimeout(function(){}, 1000);
             }
             
+
             // upload to database
             const image: ImagesModel = new ImagesModel();
-            image.name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
+            image.name = new_file_name;
+            image.output_name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
             image.dateSubmitted=Date.now().toString();
             image.dateUpdated=image.dateSubmitted;
+            if (req.body.toRemove && req.body.model_param =='false') {
+                image.toRemove = 'false';
+            }
             ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
                 .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
                 .catch((reason) => res.status(500).send(reason).end());
             // upload to database
 
+            
             ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
                 .then(result => {}).catch((reason) => res.status(500).send(reason).end());
             console.log('then!!!!!!!!!!!!!!');
@@ -324,6 +330,35 @@ export class ProjectsController {
             res.send({ fn: 'uploadLead', status: 'failure', data: err });
         }
         
+    }
+
+
+    updateComment(req: express.Request, res: express.Response) {
+        const image: ImagesModel = ImagesModel.fromObject(req.body);
+        
+        
+        ProjectsController.db.getOneRecord(ProjectsController.imagesTable, {'output_name':req.body.output_name})
+            .then((result) => {
+
+                const proj: ProjectsModel = ProjectsModel.fromObject(req.body);
+                const tmpObj = proj.toObject();
+                delete tmpObj.id;
+                delete tmpObj.name;
+                delete tmpObj.output_name;
+                delete tmpObj.toRemove;
+                delete tmpObj.submittedBy;
+                delete tmpObj.updatedBy;
+                delete tmpObj.dateSubmitted;
+                delete tmpObj.dateUpdated;
+                // tmpObj.dateUpdated=Date.now().toString();
+                
+                ProjectsController.db.updateRecord(ProjectsController.imagesTable, { 'output_name': req.body.output_name }, { $set: tmpObj })
+                    .then((results) => results ? (res.send({ fn: 'updateComment', status: 'success' })) : (res.send({ fn: 'updateComment', status: 'failure', data: 'Not found' })).end())
+                    .catch(err => res.send({ fn: 'updateComment', status: 'failure', data: err }).end());
+                
+            }).catch(err => res.send({ fn: 'updateComment', status: 'failure', data: err }).end());
+
+    
     }
 
         //downloadLead

@@ -23,6 +23,8 @@ export class ProjectsRouter extends AppRouter{
         this.expressRouter.post('/uploadLead', LeadUpload.single('file'),ProjectsRouter.projController.uploadLead);
         this.expressRouter.post('/downloadLead',ProjectsRouter.projController.downloadLead);
         this.expressRouter.post('/isReadyLead',ProjectsRouter.projController.isReadyLead);
-        this.expressRouter.post('/addImage',ProjectsRouter.projController.addImage);
+        // this.expressRouter.post('/addImage',ProjectsRouter.projController.addImage);
+        this.expressRouter.post('/updateComment',ProjectsRouter.projController.updateComment);
+        
     }
 }
