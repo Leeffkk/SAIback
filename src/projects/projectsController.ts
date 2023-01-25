@@ -425,6 +425,162 @@ export class ProjectsController {
     }
 
 
+    uploadMotion1(req: express.Request, res: express.Response) {
+        try{
+
+            const file = (req as any).file;
+
+            console.log(file);
+    
+            var fs = require('fs');
+    
+            var old_file_name = file.filename;
+
+            var new_file_name = Date.now() + file.originalname;
+    
+            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+
+            console.log(fs.existsSync(file.destination + new_file_name));
+
+            var path = require('path');
+            var abs_destination = path.resolve(file.destination)+'\\';
+
+            var inputFile1 = abs_destination + new_file_name;
+            
+            inputFile1 = inputFile1.replace('\\', '/');
+
+            console.log('inputFile1: ', inputFile1);
+
+            while(!fs.existsSync(inputFile1)){
+                setTimeout(function(){}, 1000);
+            }
+            
+
+            res.send({ fn: 'uploadMotion1', status: 'success', data: inputFile1});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadMotion1', status: 'failure', data: err });
+        }
+        
+    }
+
+
+    uploadMotion2(req: express.Request, res: express.Response) {
+        try{
+
+            
+
+            const file = (req as any).file;
+
+            console.log(file);
+    
+            var fs = require('fs');
+    
+            var old_file_name = file.filename;
+
+            var new_file_name = Date.now() + file.originalname;
+    
+            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+
+            console.log(fs.existsSync(file.destination + new_file_name));
+
+            var path = require('path');
+            var abs_destination = path.resolve(file.destination)+'\\';
+
+            var inputFile1 = abs_destination + req.body.inputFile1;
+            var inputFile2 = abs_destination + new_file_name;
+            var outputFile = abs_destination + 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
+            
+            inputFile1 = inputFile1.replace('\\', '/');
+            inputFile2 = inputFile2.replace('\\', '/');
+            outputFile = outputFile.replace('\\', '/');
+
+            console.log('inputFile1: ', inputFile1);
+            console.log('inputFile2: ', inputFile2);
+            console.log("outputFile: ", outputFile);
+
+            while(!fs.existsSync(inputFile2)){
+                setTimeout(function(){}, 1000);
+            }
+            
+            
+            ProjectsController.runModels.runMotion(inputFile1, inputFile2, outputFile)
+                .then(result => {}).catch((reason) => res.status(500).send(reason).end());
+            console.log('then!!!!!!!!!!!!!!');
+
+            res.send({ fn: 'uploadMotion2', status: 'success', data: 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png'});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadMotion2', status: 'failure', data: err });
+        }
+        
+    }
+
+
+    downloadMotion(req: express.Request, res: express.Response) {
+        try{
+            if (req.body.name == null){
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(config_to_use.motionDir + name);
+
+            console.log("downloadMotion: ", filePath);
+
+            var fs = require('fs');
+            if (fs.existsSync(filePath)){
+                res.sendFile(filePath);
+            }
+            else{
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'file not avaiable' });
+            }
+
+            // res.send({ fn: 'downloadMotion', status: 'success', data:''});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'downloadMotion', status: 'failure', data: err });
+        }
+        
+    }
+
+
+
+    isReadyMotion(req: express.Request, res: express.Response) {
+        try{
+            if (req.body.name == null){
+                res.send({ fn: 'isReadyMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(config_to_use.motionDir + name);
+
+            console.log("isReadyMotion: ", filePath);
+
+            var fs = require('fs');
+
+            
+            var isReady = fs.existsSync(filePath);
+
+            console.log("Is file ready? :", isReady);
+
+            res.send({ fn: 'isReadyMotion', status: 'success', data: isReady });
+
+
+            // res.send({ fn: 'isReadyMotion', status: 'success', data:''});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'isReadyLead', status: 'failure', data: err });
+        }
+        
+    }
+
+
+
     //getSemesters
     //returns all valid unique semesters in the database
     // getSemesters(req: express.Request, res: express.Response) {

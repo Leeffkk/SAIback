@@ -8,3 +8,4 @@ if (process.env.NODE_ENV && process.env.NODE_ENV=="prod"){
 
 const multer = require('multer')
 export const LeadUpload = multer({ dest: config_to_use.leadDir});
+export const MotionUpload = multer({ dest: config_to_use.motionDir});

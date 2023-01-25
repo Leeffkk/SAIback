@@ -37,7 +37,7 @@ export class RunModels {
         })
     }
 
-    runMotion(inputFile1:string, inputFile2:string, outputFile:string, img_mod:string): Promise<boolean>{
+    runMotion(inputFile1:string, inputFile2:string, outputFile:string): Promise<boolean>{
         return new Promise(function(resolve, reject){
             const spawn = require("child_process").spawn;
             const pyprog = spawn(config_to_use.motionPythonDir, [config_to_use.motionCode, inputFile1, inputFile2, outputFile], {

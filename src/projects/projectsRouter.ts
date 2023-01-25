@@ -1,5 +1,5 @@
 import { AppRouter } from "../common/AppRouter";
-import { LeadUpload } from "../common/MyMulter";
+import { LeadUpload, MotionUpload } from "../common/MyMulter";
 import { SecurityMiddleware } from "../security/securityMiddleware";
 import { ProjectsController } from "./projectsController";
 
@@ -25,6 +25,11 @@ export class ProjectsRouter extends AppRouter{
         this.expressRouter.post('/isReadyLead',ProjectsRouter.projController.isReadyLead);
         // this.expressRouter.post('/addImage',ProjectsRouter.projController.addImage);
         this.expressRouter.post('/updateComment',ProjectsRouter.projController.updateComment);
+        
+        this.expressRouter.post('/uploadMotion1', MotionUpload.single('file'),ProjectsRouter.projController.uploadMotion1);
+        this.expressRouter.post('/uploadMotion2', MotionUpload.single('file'),ProjectsRouter.projController.uploadMotion2);
+        this.expressRouter.post('/downloadMotion',ProjectsRouter.projController.downloadMotion);
+        this.expressRouter.post('/isReadyMotion',ProjectsRouter.projController.isReadyMotion);
         
     }
 }
