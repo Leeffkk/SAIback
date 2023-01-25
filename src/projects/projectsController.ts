@@ -488,7 +488,7 @@ export class ProjectsController {
             var path = require('path');
             var abs_destination = path.resolve(file.destination)+'\\';
 
-            var inputFile1 = abs_destination + req.body.inputFile1;
+            var inputFile1 = req.body.inputFile1;
             var inputFile2 = abs_destination + new_file_name;
             var outputFile = abs_destination + 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
             
