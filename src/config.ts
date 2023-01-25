@@ -9,9 +9,12 @@ export const Config={
     leadDir: 'leadData/',
     leadCode: 'E:/SeaIceWebsite/SAIback/src/leadCodes/getPrediction.py',
     leadCodeDir: 'E:/SeaIceWebsite/SAIback/src/leadCodes',
+    leadPythonDir: 'python',
+    motionDir: 'motionData/',
+    motionCode: 'E:/SeaIceWebsite/SAIback/src/motionCodes/website_estimate_motion.py',
+    motionCodeDir: 'E:/SeaIceWebsite/SAIback/src/motionCodes',
+    motionPythonDir: 'python',
     allowed_lead_params: ['WorldView','RadarSAT','GPRI'],
-    ket_path: 'E:/SeaIceWebsite/SAIback/src/client-key.pem',
-    cert_path: 'E:/SeaIceWebsite/SAIback/src/client-cert.pem'
 };
 
 export const ProdConfig={
@@ -24,7 +27,10 @@ export const ProdConfig={
     leadDir: '/raid1/inprogress/leeff/SAIback/leadData/',
     leadCode: '/raid1/inprogress/leeff/SAIback/src/leadCodes/getPrediction.py',
     leadCodeDir: '/raid1/inprogress/leeff/SAIback/src/leadCodes/',
+    leadPythonDir: '/raid1/inprogress/leeff/software/anaconda3/envs/yufan_lead/bin/python',
+    motionDir: '/raid1/inprogress/leeff/SAIback/motionData/',
+    motionCode: '/raid1/inprogress/leeff/SAIback/src/motionCodes/website_estimate_motion.py',
+    motionCodeDir: '/raid1/inprogress/leeff/SAIback/src/motionCodes/',
+    motionPythonDir: '/raid1/inprogress/leeff/software/anaconda3/envs/yufan_motion/bin/python',
     allowed_lead_params: ['WorldView','RadarSAT','GPRI'],
-    ket_path: '/etc/apache2/ssl/vims.cis.udel.edu.key',
-    cert_path: '/etc/apache2/ssl/vims.cis.udel.edu.cert'
 }

@@ -1,4 +1,5 @@
 node_modules
-leadData
+leadData/*
 src/leadCodes
 *.pem
+motionData/*
