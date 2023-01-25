@@ -163,7 +163,7 @@ def estimate_motion(img1,img2):
     return u,v
 
 
-def display(img1,u,v,scale):
+def display(img1,u,v,scale,output_path):
     
     xx,yy,fx,fy = scale_vectors(scale,u,v)
     
