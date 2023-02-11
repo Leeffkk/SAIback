@@ -450,7 +450,7 @@ export class ProjectsController {
             
             fs.writeFile(filePath, converted_positions, 
                 function (err: any) {
-                    console.error("Crashed when writing file");
+                    console.error("Crashed when writing file: ", err);
                 }
             );
 
