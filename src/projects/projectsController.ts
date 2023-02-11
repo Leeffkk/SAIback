@@ -448,8 +448,12 @@ export class ProjectsController {
 
             let fs = require('fs');
             
-            fs.writeFile(filePath, converted_positions);
-            
+            fs.writeFile(filePath, converted_positions, 
+                function (err: any) {
+                    console.error("Crashed when writing file");
+                }
+            );
+
 
             res.send({ fn: 'uploadLeadAnnotation', status: 'success', data: 'success!' });
 
