@@ -424,6 +424,44 @@ export class ProjectsController {
         
     }
 
+    uploadLeadAnnotation(req: express.Request, res: express.Response) {
+        try{
+            if (req.body.name == null){
+                res.send({ fn: 'uploadLeadAnnotation', status: 'failure', data: 'name can not be null' });
+            }
+            let name = req.body.name;
+            let positions = req.body.positions;
+
+            console.log("uploadLeadAnnotation_positions: ", positions);
+
+            let converted_positions = JSON.stringify(positions);
+
+            console.log("uploadLeadAnnotation_Converted: ", converted_positions);
+
+            let path = require('path');
+            let filePath = path.resolve(config_to_use.leadDir + name);
+
+            console.log("uploadLeadAnnotation: ", filePath);
+
+            
+
+
+            let fs = require('fs');
+            
+            fs.writeFile(filePath, converted_positions);
+            
+
+            res.send({ fn: 'uploadLeadAnnotation', status: 'success', data: 'success!' });
+
+
+            // res.send({ fn: 'uploadLeadAnnotation', status: 'success', data:''});
+
+        } catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadLeadAnnotation', status: 'failure', data: err });
+        }
+    }
+
 
     uploadMotion1(req: express.Request, res: express.Response) {
         try{
