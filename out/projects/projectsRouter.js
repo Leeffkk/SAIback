@@ -38,6 +38,13 @@ var ProjectsRouter = /** @class */ (function (_super) {
         this.expressRouter.post('/uploadLead', MyMulter_1.LeadUpload.single('file'), ProjectsRouter.projController.uploadLead);
         this.expressRouter.post('/downloadLead', ProjectsRouter.projController.downloadLead);
         this.expressRouter.post('/isReadyLead', ProjectsRouter.projController.isReadyLead);
+        // this.expressRouter.post('/addImage',ProjectsRouter.projController.addImage);
+        this.expressRouter.post('/updateComment', ProjectsRouter.projController.updateComment);
+        this.expressRouter.post('/uploadLeadAnnotation', ProjectsRouter.projController.uploadLeadAnnotation);
+        this.expressRouter.post('/uploadMotion1', MyMulter_1.MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion1);
+        this.expressRouter.post('/uploadMotion2', MyMulter_1.MotionUpload.single('file'), ProjectsRouter.projController.uploadMotion2);
+        this.expressRouter.post('/downloadMotion', ProjectsRouter.projController.downloadMotion);
+        this.expressRouter.post('/isReadyMotion', ProjectsRouter.projController.isReadyMotion);
     };
     ProjectsRouter.projController = new projectsController_1.ProjectsController();
     return ProjectsRouter;

@@ -10,9 +10,14 @@ exports.Config = {
     // url: "mongodb://localhost:27017/"
     url: "mongodb+srv://yufan:yufan@cluster0.5i65efn.mongodb.net/test",
     leadDir: 'leadData/',
-    leadCode: 'E:/Research/SeaIceWebsite/SAI/src/leadCodes/getPrediction.py',
-    leadCodeDir: 'E:/Research/SeaIceWebsite/SAI/src/leadCodes',
-    allowed_lead_params: ['WorldView', 'RadarSAT', 'GPRI']
+    leadCode: 'E:/SeaIceWebsite/SAIback/src/leadCodes/getPrediction.py',
+    leadCodeDir: 'E:/SeaIceWebsite/SAIback/src/leadCodes',
+    leadPythonDir: 'python',
+    motionDir: 'motionData/',
+    motionCode: 'E:/SeaIceWebsite/SAIback/src/motionCodes/website_estimate_motion.py',
+    motionCodeDir: 'E:/SeaIceWebsite/SAIback/src/motionCodes',
+    motionPythonDir: 'python',
+    allowed_lead_params: ['WorldView', 'RadarSAT', 'GPRI'],
 };
 exports.ProdConfig = {
     serverport: process.env.PORT || 4396,
@@ -24,6 +29,11 @@ exports.ProdConfig = {
     leadDir: '/raid1/inprogress/leeff/SAIback/leadData/',
     leadCode: '/raid1/inprogress/leeff/SAIback/src/leadCodes/getPrediction.py',
     leadCodeDir: '/raid1/inprogress/leeff/SAIback/src/leadCodes/',
-    allowed_lead_params: ['WorldView', 'RadarSAT', 'GPRI']
+    leadPythonDir: '/raid1/inprogress/leeff/software/anaconda3/envs/yufan_lead/bin/python',
+    motionDir: '/raid1/inprogress/leeff/SAIback/motionData/',
+    motionCode: '/raid1/inprogress/leeff/SAIback/src/motionCodes/website_estimate_motion.py',
+    motionCodeDir: '/raid1/inprogress/leeff/SAIback/src/motionCodes/',
+    motionPythonDir: '/raid1/inprogress/leeff/software/anaconda3/envs/yufan_motion/bin/python',
+    allowed_lead_params: ['WorldView', 'RadarSAT', 'GPRI'],
 };
 //# sourceMappingURL=config.js.map

@@ -6,6 +6,7 @@ var MongoDB_1 = require("../common/MongoDB");
 var config_1 = require("../config");
 // import { LeadUpload } from '../common/MyMulter';
 var RunModels_1 = require("../common/RunModels");
+var imagesModel_1 = require("./imagesModel");
 //This is just an example of a second controller attached to the security module
 var config_to_use = config_1.Config;
 if (process.env.NODE_ENV && process.env.NODE_ENV == "prod") {
@@ -238,6 +239,18 @@ var ProjectsController = /** @class */ (function () {
             });
         }
     };
+    // addImage(req: express.Request, res: express.Response) {
+    //     const image: ImagesModel = ImagesModel.fromObject(req.body);
+    //     // image.submittedBy=req.body.authUser.email;
+    //     // image.submittedBy='';
+    //     // image.updatedBy=req.body.authUser.email;
+    //     // image.updatedBy='';
+    //     image.dateSubmitted=Date.now().toString();
+    //     image.dateUpdated=image.dateSubmitted;
+    //     ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
+    //         .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
+    //         .catch((reason) => res.status(500).send(reason).end());
+    // }
     //uploadLead
     //uploads image for the lead model to process
     ProjectsController.prototype.uploadLead = function (req, res) {
@@ -252,10 +265,12 @@ var ProjectsController = /** @class */ (function () {
             var fs = require('fs');
             var old_file_name = file.filename;
             var new_file_name = Date.now() + file.originalname;
-            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
-            console.log(fs.existsSync(file.destination + new_file_name));
+            // fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+            var sharp = require('sharp');
+            sharp(file.buffer).resize(100).toFile(config_to_use.leadDir + new_file_name).then();
+            console.log(fs.existsSync(config_to_use.leadDir + new_file_name));
             var path = require('path');
-            var abs_destination = path.resolve(file.destination) + '\\';
+            var abs_destination = path.resolve(config_to_use.leadDir) + '\\';
             var inputFile = abs_destination + new_file_name;
             var outputFile = abs_destination + 'output_' + new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
             inputFile = inputFile.replace('\\', '/');
@@ -263,6 +278,22 @@ var ProjectsController = /** @class */ (function () {
             console.log('inputFile: ', inputFile);
             console.log("outputFile: ", outputFile);
             console.log("img_mod: ", img_mod);
+            while (!fs.existsSync(inputFile)) {
+                setTimeout(function () { }, 1000);
+            }
+            // upload to database
+            // const image: ImagesModel = new ImagesModel();
+            // image.name = new_file_name;
+            // image.output_name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
+            // image.dateSubmitted=Date.now().toString();
+            // image.dateUpdated=image.dateSubmitted;
+            // if (req.body.toRemove && req.body.model_param =='false') {
+            //     image.toRemove = 'false';
+            // }
+            // ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
+            //     .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
+            //     .catch((reason) => res.status(500).send(reason).end());
+            // // upload to database
             ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
                 .then(function (result) { }).catch(function (reason) { return res.status(500).send(reason).end(); });
             console.log('then!!!!!!!!!!!!!!');
@@ -272,6 +303,26 @@ var ProjectsController = /** @class */ (function () {
             console.error(err);
             res.send({ fn: 'uploadLead', status: 'failure', data: err });
         }
+    };
+    ProjectsController.prototype.updateComment = function (req, res) {
+        var image = imagesModel_1.ImagesModel.fromObject(req.body);
+        ProjectsController.db.getOneRecord(ProjectsController.imagesTable, { 'output_name': req.body.output_name })
+            .then(function (result) {
+            var image = imagesModel_1.ImagesModel.fromObject(req.body);
+            var tmpObj = image.toObject();
+            delete tmpObj.id;
+            delete tmpObj.name;
+            delete tmpObj.output_name;
+            delete tmpObj.toRemove;
+            delete tmpObj.submittedBy;
+            delete tmpObj.updatedBy;
+            delete tmpObj.dateSubmitted;
+            delete tmpObj.dateUpdated;
+            // tmpObj.dateUpdated=Date.now().toString();
+            ProjectsController.db.updateRecord(ProjectsController.imagesTable, { 'output_name': req.body.output_name }, { $set: tmpObj })
+                .then(function (results) { return results ? (res.send({ fn: 'updateComment', status: 'success' })) : (res.send({ fn: 'updateComment', status: 'failure', data: 'Not found' })).end(); })
+                .catch(function (err) { return res.send({ fn: 'updateComment', status: 'failure', data: err }).end(); });
+        }).catch(function (err) { return res.send({ fn: 'updateComment', status: 'failure', data: err }).end(); });
     };
     //downloadLead
     //download Lead result processed by lead model
@@ -320,7 +371,133 @@ var ProjectsController = /** @class */ (function () {
             res.send({ fn: 'isReadyLead', status: 'failure', data: err });
         }
     };
-    ProjectsController.db = new MongoDB_1.Database(config_to_use.url, "projects");
+    ProjectsController.prototype.uploadLeadAnnotation = function (req, res) {
+        try {
+            if (req.body.name == null) {
+                res.send({ fn: 'uploadLeadAnnotation', status: 'failure', data: 'name can not be null' });
+            }
+            var name_1 = req.body.name;
+            var positions = req.body.positions;
+            console.log("uploadLeadAnnotation_positions: ", positions);
+            var converted_positions = JSON.stringify(positions);
+            console.log("uploadLeadAnnotation_Converted: ", converted_positions);
+            var path = require('path');
+            var filePath = path.resolve(config_to_use.leadDir + name_1);
+            console.log("uploadLeadAnnotation: ", filePath);
+            var fs = require('fs');
+            fs.writeFile(filePath, converted_positions, function (err) {
+                console.error("Crashed when writing file: ", err);
+            });
+            res.send({ fn: 'uploadLeadAnnotation', status: 'success', data: 'success!' });
+            // res.send({ fn: 'uploadLeadAnnotation', status: 'success', data:''});
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadLeadAnnotation', status: 'failure', data: err });
+        }
+    };
+    ProjectsController.prototype.uploadMotion1 = function (req, res) {
+        try {
+            var file = req.file;
+            console.log(file);
+            var fs = require('fs');
+            var old_file_name = file.filename;
+            var new_file_name = Date.now() + file.originalname;
+            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+            console.log(fs.existsSync(file.destination + new_file_name));
+            var path = require('path');
+            var abs_destination = path.resolve(file.destination) + '\\';
+            var inputFile1 = abs_destination + new_file_name;
+            inputFile1 = inputFile1.replace('\\', '/');
+            console.log('inputFile1: ', inputFile1);
+            while (!fs.existsSync(inputFile1)) {
+                setTimeout(function () { }, 1000);
+            }
+            res.send({ fn: 'uploadMotion1', status: 'success', data: inputFile1 });
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadMotion1', status: 'failure', data: err });
+        }
+    };
+    ProjectsController.prototype.uploadMotion2 = function (req, res) {
+        try {
+            var file = req.file;
+            console.log(file);
+            var fs = require('fs');
+            var old_file_name = file.filename;
+            var new_file_name = Date.now() + file.originalname;
+            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+            console.log(fs.existsSync(file.destination + new_file_name));
+            var path = require('path');
+            var abs_destination = path.resolve(file.destination) + '\\';
+            var inputFile1 = req.body.inputFile1;
+            var inputFile2 = abs_destination + new_file_name;
+            var outputFile = abs_destination + 'output_' + new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
+            inputFile1 = inputFile1.replace('\\', '/');
+            inputFile2 = inputFile2.replace('\\', '/');
+            outputFile = outputFile.replace('\\', '/');
+            console.log('inputFile1: ', inputFile1);
+            console.log('inputFile2: ', inputFile2);
+            console.log("outputFile: ", outputFile);
+            while (!fs.existsSync(inputFile2)) {
+                setTimeout(function () { }, 1000);
+            }
+            ProjectsController.runModels.runMotion(inputFile1, inputFile2, outputFile)
+                .then(function (result) { }).catch(function (reason) { return res.status(500).send(reason).end(); });
+            console.log('then!!!!!!!!!!!!!!');
+            res.send({ fn: 'uploadMotion2', status: 'success', data: 'output_' + new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png' });
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'uploadMotion2', status: 'failure', data: err });
+        }
+    };
+    ProjectsController.prototype.downloadMotion = function (req, res) {
+        try {
+            if (req.body.name == null) {
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(config_to_use.motionDir + name);
+            console.log("downloadMotion: ", filePath);
+            var fs = require('fs');
+            if (fs.existsSync(filePath)) {
+                res.sendFile(filePath);
+            }
+            else {
+                res.send({ fn: 'downloadMotion', status: 'failure', data: 'file not avaiable' });
+            }
+            // res.send({ fn: 'downloadMotion', status: 'success', data:''});
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'downloadMotion', status: 'failure', data: err });
+        }
+    };
+    ProjectsController.prototype.isReadyMotion = function (req, res) {
+        try {
+            if (req.body.name == null) {
+                res.send({ fn: 'isReadyMotion', status: 'failure', data: 'name can not be null' });
+            }
+            var name = req.body.name;
+            var path = require('path');
+            var filePath = path.resolve(config_to_use.motionDir + name);
+            console.log("isReadyMotion: ", filePath);
+            var fs = require('fs');
+            var isReady = fs.existsSync(filePath);
+            console.log("Is file ready? :", isReady);
+            res.send({ fn: 'isReadyMotion', status: 'success', data: isReady });
+            // res.send({ fn: 'isReadyMotion', status: 'success', data:''});
+        }
+        catch (err) {
+            console.error(err);
+            res.send({ fn: 'isReadyLead', status: 'failure', data: err });
+        }
+    };
+    ProjectsController.db = new MongoDB_1.Database(config_to_use.url, "images");
+    ProjectsController.imagesTable = 'images';
     ProjectsController.projectsTable = 'projects';
     ProjectsController.runModels = new RunModels_1.RunModels();
     return ProjectsController;

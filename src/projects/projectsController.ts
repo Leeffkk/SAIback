@@ -282,12 +282,16 @@ export class ProjectsController {
 
             var new_file_name = Date.now() + file.originalname;
     
-            fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+            // fs.renameSync(file.destination + old_file_name, file.destination + new_file_name);
+            var sharp = require('sharp');
+            sharp(file.buffer).resize(100).toFile(config_to_use.leadDir + new_file_name).then(
 
-            console.log(fs.existsSync(file.destination + new_file_name));
+            );
+
+            console.log(fs.existsSync(config_to_use.leadDir + new_file_name));
 
             var path = require('path');
-            var abs_destination = path.resolve(file.destination)+'\\';
+            var abs_destination = path.resolve(config_to_use.leadDir)+'\\';
 
             var inputFile = abs_destination + new_file_name;
             var outputFile = abs_destination + 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
@@ -305,18 +309,18 @@ export class ProjectsController {
             
 
             // upload to database
-            const image: ImagesModel = new ImagesModel();
-            image.name = new_file_name;
-            image.output_name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
-            image.dateSubmitted=Date.now().toString();
-            image.dateUpdated=image.dateSubmitted;
-            if (req.body.toRemove && req.body.model_param =='false') {
-                image.toRemove = 'false';
-            }
-            ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
-                .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
-                .catch((reason) => res.status(500).send(reason).end());
-            // upload to database
+            // const image: ImagesModel = new ImagesModel();
+            // image.name = new_file_name;
+            // image.output_name = 'output_'+ new_file_name.substring(0, new_file_name.lastIndexOf('.')) + '.png';
+            // image.dateSubmitted=Date.now().toString();
+            // image.dateUpdated=image.dateSubmitted;
+            // if (req.body.toRemove && req.body.model_param =='false') {
+            //     image.toRemove = 'false';
+            // }
+            // ProjectsController.db.addRecord(ProjectsController.imagesTable, image.toObject())
+            //     .then((result: boolean) => res.send({ fn: 'addImage', status: 'success' }).end())
+            //     .catch((reason) => res.status(500).send(reason).end());
+            // // upload to database
 
             
             ProjectsController.runModels.runLead(inputFile, outputFile, img_mod)
