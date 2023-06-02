@@ -3,3 +3,4 @@ leadData/*
 src/leadCodes
 *.pem
 motionData/*
+out
